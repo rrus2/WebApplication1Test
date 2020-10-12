@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1Front.ViewModels;
 using WebApplication1Front.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1Front.Controllers
 {
@@ -28,12 +29,20 @@ namespace WebApplication1Front.Controllers
         {
             return View(_homeController.IndexAsync());
         }
-        public async Task<IActionResult> Register(ApplicationUserViewModel model)
+        public async Task<IActionResult> Register(string email, string birthdate, string password, string repeatpassword)
         {
-            if (!ModelState.IsValid)
-                return View(nameof(Index));
+            var model = new ApplicationUserViewModel
+            {
+                Email = email,
+                Birthdate = Convert.ToDateTime(birthdate),
+                Password = password,
+                RepeatPassword = repeatpassword
+            };
 
             var result = await _userService.CreateUser(model);
+            if (result == null)
+                return View(nameof(Index));
+
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, result.Email)
@@ -45,16 +54,19 @@ namespace WebApplication1Front.Controllers
 
             return View(nameof(Index));
         }
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(string email, string password)
         {
-            if (!ModelState.IsValid)
-                return View(nameof(Index));
+            var model = new LoginViewModel { Email = email, Password = password };
 
             var user = await _userService.LoginUser(model);
+            if (user == null)
+                return View(nameof(Index));
+
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.Email)
             };
+
             var claimsIdentity = new ClaimsIdentity(claims);
             var principle = new ClaimsPrincipal(claimsIdentity);
 

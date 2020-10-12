@@ -29,6 +29,7 @@ namespace WebApplication1Front
             services.AddMvcCore();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGenreService, GenreService>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

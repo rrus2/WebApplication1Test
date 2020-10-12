@@ -1,4 +1,6 @@
-﻿@model WebApplication1Front.ViewModels.ApplicationUserViewModel
+﻿@{ 
+    var user = new WebApplication1Front.ViewModels.ApplicationUserViewModel();
+}
 <div>
     <!-- Register -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
@@ -16,18 +18,18 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" class="jumbotron text-center" asp-controller="User" asp-action="Register">
+                    <form method="post" class="jumbotron text-center" asp-controller="User" asp-action="Register" asp-route-birthdate="@user.Birthdate" asp-route-email="@user.Email" asp-route-password="@user.Password" asp-route-repeatpassword="@user.RepeatPassword">
                         <div class="form-group">
-                            <input class="form-control" asp-for="Email" placeholder="Email" type="text" />
+                            <input class="form-control" name="email" asp-for="@user.Email" placeholder="Email" type="text" />
                         </div>
                         <div class="form-group">
-                            <input class="form-control" asp-for="Birthdate" type="date" />
+                            <input class="form-control" name="birthdate" asp-for="@user.Birthdate" type="date" />
                         </div>
                         <div class="form-group">
-                            <input class="form-control" asp-for="Password" placeholder="Password" type="password" />
+                            <input class="form-control" name="password" asp-for="@user.Password" placeholder="Password" type="password" />
                         </div>
                         <div class="form-group">
-                            <input class="form-control" asp-for="RepeatPassword" placeholder="Repeat password" type="password" />
+                            <input class="form-control" name="repeatpassword" asp-for="@user.RepeatPassword" placeholder="Repeat password" type="password" />
                         </div>
                         <div class="form-group">
                             <input class="btn btn-secondary" type="submit" value="Register" />
@@ -54,13 +56,13 @@
                 <div class="modal-body">
                     <form method="post" class="jumbotron text-center" asp-controller="User" asp-action="Login">
                         <div class="form-group">
-                            <input class="form-control" asp-for="Email" placeholder="Email" type="text" />
+                            <input class="form-control" name="email" asp-for="@user.Email" placeholder="Email" type="text" />
                         </div>
                         <div class="form-group">
-                            <input class="form-control" asp-for="Password" placeholder="Password" type="password" />
+                            <input class="form-control" name="password" asp-for="@user.Password" placeholder="Password" type="password" />
                         </div>
                         <div class="form-group">
-                            <input class="btn btn-secondary" type="submit" value="Register" />
+                            <input class="btn btn-secondary" type="submit" value="Login" />
                         </div>
                     </form>
                 </div>
