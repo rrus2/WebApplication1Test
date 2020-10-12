@@ -1,0 +1,10 @@
+﻿@if (User.Identity.Name != null)
+{
+    <form asp-controller="User" asp-action="Logout">
+        <input class="btn btn-primary" type="submit" value="Logout" />
+    </form>
+}
+else
+{
+    <partial name="_LoginMenu" />
+}
