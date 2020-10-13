@@ -9,7 +9,7 @@ namespace WebApplication1Front.ViewModels
     public class ProductViewModel
     {
         [Required]
-        [DataType(DataType.EmailAddress)]
+        [DataType(DataType.Text)]
         public string Email { get; set; }
         [Required]
         [DataType(DataType.Currency)]
@@ -17,5 +17,7 @@ namespace WebApplication1Front.ViewModels
         [Required]
         public int Stock { get; set; }
         public string ImagePath { get; set; }
+        [Required]
+        public int GenreID { get; set; }
     }
 }

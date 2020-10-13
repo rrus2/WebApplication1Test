@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -12,8 +15,24 @@ namespace WebApplication1Front.Services
 {
     public class ProductService : IProductService
     {
-        public async Task<Product> CreateProduct(ProductViewModel model)
+        private readonly IWebHostEnvironment _env;
+        public ProductService(IWebHostEnvironment env)
         {
+            _env = env;
+        }
+        public async Task<Product> CreateProduct(ProductViewModel model, IFormFile file)
+        {
+            if (file != null)
+            {
+                var uploads = Path.Combine(_env.WebRootPath, "images");
+                var fileName = Guid.NewGuid().ToString() + file.FileName;
+                using (var stream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                    var imagePath = "images/" + fileName;
+                    model.ImagePath = imagePath;
+                }
+            }
             using (var client = new HttpClient())
             {
                 var serial = Newtonsoft.Json.JsonConvert.SerializeObject(model);

@@ -23,7 +23,7 @@ namespace WebApplication1Front.Controllers
         {
             _userService = userService;
             _genreService = genreService;
-            _homeController = new HomeController(null, _genreService);
+            _homeController = new HomeController(null);
         }
         public IActionResult Index()
         {
@@ -47,6 +47,7 @@ namespace WebApplication1Front.Controllers
             {
                 new Claim(ClaimTypes.Name, result.Email)
             };
+
             var claimsIdentity = new ClaimsIdentity(claims);
             var principle = new ClaimsPrincipal(claimsIdentity);
 

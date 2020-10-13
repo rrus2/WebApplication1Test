@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace WebApplication1Front.Services
 {
     public interface IProductService
     {
-        Task<Product> CreateProduct(ProductViewModel model);
+        Task<Product> CreateProduct(ProductViewModel model, IFormFile file);
         Task<IEnumerable<Product>> GetProducts();
         Task<Product> GetProduct(int id);
         Task<Product> UpdateProduct(int id, ProductViewModel model);

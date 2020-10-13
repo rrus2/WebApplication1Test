@@ -15,17 +15,14 @@ namespace WebApplication1Front.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IGenreService _genreService;
 
-        public HomeController(ILogger<HomeController> logger, IGenreService genreService)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _genreService = genreService;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public IActionResult IndexAsync()
         {
-            await LoadGenres();
             return View();
         }
 
@@ -38,11 +35,6 @@ namespace WebApplication1Front.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-        private async Task LoadGenres()
-        {
-            var genres = await _genreService.GetGenres();
-            ViewBag.Genres = new SelectList(genres, "Name", "Name");
         }
     }
 }

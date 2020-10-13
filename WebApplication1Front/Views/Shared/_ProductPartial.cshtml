@@ -1,0 +1,44 @@
+﻿@{ 
+    var product = new WebApplication1Front.ViewModels.ProductViewModel();
+}
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Create product
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="jumbotron text-center" asp-action="Create" asp-controller="Products" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input class="form-control" asp-for="@product.Email" name="name" placeholder="Name" />
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" asp-for="@product.Price" name="price" placeholder="Price" />
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" asp-for="@product.Stock" name="stock" placeholder="Stock" />
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="genreid" asp-items="@ViewBag.Genres" asp-for="@product.GenreID">
+                            <option value="0">Select a genre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control-file" type="file" name="file" placeholder="Image" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Create product" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
