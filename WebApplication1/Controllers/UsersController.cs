@@ -26,15 +26,16 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        [HttpPost("getclaims")]
-        public async Task<ActionResult<List<Claim>>> GetClaims(ApplicationUser user)
+        [HttpPost("getrolesbyuser")]
+        public async Task<ActionResult<List<string>>> GetRolesByUser(ApplicationUser user)
         {
             if (user == null)
                 return BadRequest();
 
-            var claims = await _userManager.GetClaimsAsync(user);
-            return claims.ToList();
+            var roles = await _userManager.GetRolesAsync(user);
+            return Ok(roles.ToList());
         }
+
         [HttpPost("loginuser")]
         public async Task<ActionResult<ApplicationUser>> LoginUser(LoginViewModel model)
         {
@@ -46,6 +47,8 @@ namespace WebApplication1.Controllers
                 return BadRequest();
 
             var user = await _userManager.FindByNameAsync(model.Email);
+            if (user == null)
+                return BadRequest();
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
 
             if (result.Succeeded)
@@ -82,6 +85,11 @@ namespace WebApplication1.Controllers
             if (result.Succeeded)
             {
                 var userToReturn = await _userManager.FindByNameAsync(user.UserName);
+                if (_userManager.Users.Count() == 0)
+                    await _userManager.AddToRoleAsync(userToReturn, "Admin");
+                else
+                    await _userManager.AddToRoleAsync(userToReturn, "User");
+
                 return Ok(userToReturn);
             }
             else

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1Front.ViewModels;
 using WebApplication1Front.Services;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using System.Runtime.CompilerServices;
 
 namespace WebApplication1Front.Controllers
 {
@@ -18,17 +20,14 @@ namespace WebApplication1Front.Controllers
     {
         private readonly IUserService _userService;
         private readonly IGenreService _genreService;
-        private HomeController _homeController;
-        public UserController(IUserService userService, IGenreService genreService)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserController(IUserService userService, IGenreService genreService, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
             _genreService = genreService;
-            _homeController = new HomeController(null);
+            _httpContextAccessor = httpContextAccessor;
         }
-        public IActionResult Index()
-        {
-            return View(_homeController.IndexAsync());
-        }
+
         public async Task<IActionResult> Register(string email, string birthdate, string password, string repeatpassword)
         {
             var model = new ApplicationUserViewModel
@@ -41,7 +40,13 @@ namespace WebApplication1Front.Controllers
 
             var result = await _userService.CreateUser(model);
             if (result == null)
-                return View(nameof(Index));
+                return View("Index", "Home");
+
+            var roles = await _userService.GetRolesByUser(result);
+            if (roles.Contains("Admin"))
+                ViewBag.User = roles[0];
+            else
+                ViewBag.User = "User";
 
             var claims = new List<Claim>()
             {
@@ -52,8 +57,9 @@ namespace WebApplication1Front.Controllers
             var principle = new ClaimsPrincipal(claimsIdentity);
 
             HttpContext.User = principle;
+            _httpContextAccessor.HttpContext.User = principle;
 
-            return View(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
         public async Task<IActionResult> Login(string email, string password)
         {
@@ -61,7 +67,13 @@ namespace WebApplication1Front.Controllers
 
             var user = await _userService.LoginUser(model);
             if (user == null)
-                return View(nameof(Index));
+                return View("Index", "Home");
+
+            var roles = await _userService.GetRolesByUser(user);
+            if (roles.Contains("Admin"))
+                ViewBag.User = roles[0];
+            else
+                ViewBag.User = "User";
 
             var claims = new List<Claim>()
             {
@@ -72,14 +84,18 @@ namespace WebApplication1Front.Controllers
             var principle = new ClaimsPrincipal(claimsIdentity);
 
             HttpContext.User = principle;
+            _httpContextAccessor.HttpContext.User = principle;
 
-            return View(nameof(Index));
+            return View("Index", "Home");
         }
         public IActionResult Logout()
         {
-            HttpContext.User = null;
+            ViewBag.User = null;
 
-            return View(nameof(Index));
+            HttpContext.User = null;
+            _httpContextAccessor.HttpContext.User = null;
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -14,7 +14,7 @@ namespace WebApplication1Front.Services
 {
     public class UserService : IUserService
     {
-        public async Task<ApplicationUserViewModel> CreateUser(ApplicationUserViewModel model)
+        public async Task<ApplicationUser> CreateUser(ApplicationUserViewModel model)
         {
             using (var client = new HttpClient())
             {
@@ -24,12 +24,12 @@ namespace WebApplication1Front.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var obj = await response.Content.ReadAsStringAsync();
-                    var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ApplicationUserViewModel>(obj);
+                    var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ApplicationUser>(obj);
                     return user;
                 }
                 else
                 {
-                    return new ApplicationUserViewModel();
+                    return null;
                 }
             }
         }
@@ -39,23 +39,21 @@ namespace WebApplication1Front.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<Claim>> GetClaimsByUser(ApplicationUser user)
+        public async Task<List<string>> GetRolesByUser(ApplicationUser user)
         {
             using (var client = new HttpClient())
             {
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(user);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync("https://localhost:44387/api/users/getclaims", content);
+                var response = await client.PostAsync("https://localhost:44387/api/users/getrolesbyuser", content);
                 if (response.IsSuccessStatusCode)
                 {
                     var str = await response.Content.ReadAsStringAsync();
-                    var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Claim>>(str);
+                    var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(str);
                     return obj;
                 }
                 else
-                {
-                    return new List<Claim>();
-                }
+                    return null;
             }
         }
 
@@ -78,7 +76,7 @@ namespace WebApplication1Front.Services
                     return user;
                 }
                 else
-                    return new ApplicationUser();
+                    return null;
             }
         }
     }

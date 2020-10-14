@@ -1,4 +1,8 @@
-﻿@if (User.Identity.Name != null)
+﻿@inject Microsoft.AspNetCore.Http.HttpContextAccessor _accessor
+@{ 
+    var user = _accessor.HttpContext.User;
+}
+@if (user.Identity.Name != null)
 {
     <form asp-controller="User" asp-action="Logout">
         <input class="btn btn-primary" type="submit" value="Logout" />

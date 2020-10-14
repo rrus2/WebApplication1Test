@@ -11,10 +11,10 @@ namespace WebApplication1Front.Services
 {
     public interface IUserService
     {
-        Task<ApplicationUserViewModel> CreateUser(ApplicationUserViewModel model);
+        Task<ApplicationUser> CreateUser(ApplicationUserViewModel model);
         Task<ApplicationUser> LoginUser(LoginViewModel model);
         Task<ApplicationUserViewModel> DeleteUser(ApplicationUserViewModel model);
         Task<IEnumerable<ApplicationUserViewModel>> GetUsers();
-        Task<List<Claim>> GetClaimsByUser(ApplicationUser user);
+        Task<List<string>> GetRolesByUser(ApplicationUser user);
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,9 @@ namespace WebApplication1Front
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGenreService, GenreService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddHttpContextAccessor();
+            services.AddScoped<HttpContextAccessor>();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +62,7 @@ namespace WebApplication1Front
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
     }
