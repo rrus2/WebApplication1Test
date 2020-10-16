@@ -1,8 +1,10 @@
-﻿@inject Microsoft.AspNetCore.Http.HttpContextAccessor _accessor
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _accessor
 @{ 
     var user = _accessor.HttpContext.User;
+    var lol = new byte[10];
+    _accessor.HttpContext.Session.TryGetValue("role", out lol);
 }
-@if (user.Identity.Name != null)
+@if (user.Identity.Name != null || lol != null)
 {
     <form asp-controller="User" asp-action="Logout">
         <input class="btn btn-primary" type="submit" value="Logout" />

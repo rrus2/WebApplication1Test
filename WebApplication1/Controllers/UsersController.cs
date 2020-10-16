@@ -85,7 +85,7 @@ namespace WebApplication1.Controllers
             if (result.Succeeded)
             {
                 var userToReturn = await _userManager.FindByNameAsync(user.UserName);
-                if (_userManager.Users.Count() == 0)
+                if (_userManager.Users.Count() == 1)
                     await _userManager.AddToRoleAsync(userToReturn, "Admin");
                 else
                     await _userManager.AddToRoleAsync(userToReturn, "User");
@@ -100,6 +100,16 @@ namespace WebApplication1.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ApplicationUser>> PutUser(string id, ApplicationUserViewModel model)
         {
+            if (model.Email == null || model.Email == string.Empty)
+                return BadRequest();
+            if (model.Birthdate == null)
+                return BadRequest();
+            if (model.Password == null || model.Password == string.Empty)
+                return BadRequest();
+            if (model.RepeatPassword == null || model.RepeatPassword == string.Empty)
+                return BadRequest();
+            if (model.Password != model.RepeatPassword)
+                return BadRequest();
             if (id == string.Empty || id == null)
                 return BadRequest();
 

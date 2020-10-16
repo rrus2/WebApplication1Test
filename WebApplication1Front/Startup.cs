@@ -34,6 +34,7 @@ namespace WebApplication1Front
             services.AddHttpContextAccessor();
             services.AddScoped<HttpContextAccessor>();
             services.AddRazorPages();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +56,8 @@ namespace WebApplication1Front
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

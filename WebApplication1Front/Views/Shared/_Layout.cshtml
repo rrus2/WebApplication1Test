@@ -1,4 +1,8 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _accessor
+@{
+    var text = new byte[10];
+    var role = _accessor.HttpContext.Session.TryGetValue("role", out text);
+ }
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,12 +32,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Products" asp-action="Index">Products</a>
                         </li>
-                        <partial name="_Index" model="new WebApplication1Front.Views.Shared.IndexModel(_accessor)" />
-                        @if (ViewBag.User == "Admin")
+                        @if (text != null)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Admin</a>
-                            </li>
+                            if (System.Text.Encoding.Default.GetString(text) == "Admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Admin</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>

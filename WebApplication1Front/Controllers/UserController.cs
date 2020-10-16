@@ -85,8 +85,9 @@ namespace WebApplication1Front.Controllers
 
             HttpContext.User = principle;
             _httpContextAccessor.HttpContext.User = principle;
+            _httpContextAccessor.HttpContext.Session.SetString("role", roles[0]);
 
-            return View("Index", "Home");
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult Logout()
         {
@@ -94,6 +95,7 @@ namespace WebApplication1Front.Controllers
 
             HttpContext.User = null;
             _httpContextAccessor.HttpContext.User = null;
+            _httpContextAccessor.HttpContext.Session.Clear();
 
             return RedirectToAction("Index", "Home");
         }
