@@ -31,6 +31,12 @@ namespace WebApplication1.Controllers
         {
             if (user == null)
                 return BadRequest();
+            if (user.Email == string.Empty || user.Email == null)
+                return BadRequest();
+            if (user.UserName == string.Empty || user.UserName == null)
+                return BadRequest();
+            if (user.Birthdate == null)
+                return BadRequest();
 
             var roles = await _userManager.GetRolesAsync(user);
             return Ok(roles.ToList());
@@ -67,6 +73,9 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ApplicationUser>> GetUser(string id)
         {
+            if (id == null || id == string.Empty)
+                return BadRequest();
+
             return Ok(await _userManager.FindByIdAsync(id));
         }
 
@@ -74,6 +83,17 @@ namespace WebApplication1.Controllers
         [HttpPost("postuser")]
         public async Task<ActionResult<ApplicationUser>> PostUser(ApplicationUserViewModel model)
         {
+            if (model == null)
+                return BadRequest();
+            if (model.Email == null || model.Email == string.Empty)
+                return BadRequest();
+            if (model.Password == null || model.Password == string.Empty)
+                return BadRequest();
+            if (model.RepeatPassword == null || model.RepeatPassword == string.Empty)
+                return BadRequest();
+            if (model.Password != model.RepeatPassword)
+                return BadRequest();
+
             var user = new ApplicationUser
             {
                 Email = model.Email,
