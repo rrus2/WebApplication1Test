@@ -14,10 +14,12 @@ namespace WebApplication1Front.Controllers
     {
         private readonly IProductService _productService;
         private readonly IGenreService _genreService;
-        public ProductsController(IProductService productService, IGenreService genreService)
+        private readonly IOrderService _orderService;
+        public ProductsController(IProductService productService, IGenreService genreService, IOrderService orderService)
         {
             _productService = productService;
             _genreService = genreService;
+            _orderService = orderService;
         }
         public async Task<IActionResult> Index()
         {
@@ -40,6 +42,23 @@ namespace WebApplication1Front.Controllers
             await _productService.CreateProduct(model, file);
 
             return View(nameof(Index));
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _productService.GetProduct(id);
+            var stock = new List<int>();
+            for (int i = 1; i <= product.Stock; i++)
+            {
+                stock.Add(i);
+            }
+            ViewBag.Amount = new SelectList(stock);
+            return View(product);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Details(int id, int amount)
+        {
+            await _orderService.PlaceOrder(HttpContext.User.Identity.Name, id, amount);
+            return View(nameof(Details), id);
         }
         private async Task LoadGenres()
         {

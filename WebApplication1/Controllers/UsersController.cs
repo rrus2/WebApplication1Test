@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WebApplication1.Context;
+using WebApplication1.Models;
 using WebApplication1.ViewModels;
 using WebApplication1Front.ViewModels;
 

@@ -23,7 +23,7 @@ else
                 <p>@product.Price</p>
                 <p>@product.Genre.Name</p>
                 <p><a asp-action="Details"><img class="img-fluid" height="50" width="50" src="@product.ImagePath" alt="No image" /></a></p>
-                <p><a asp-action="Details" class="btn btn-primary">View</a></p>
+                <p><a asp-action="Details" class="btn btn-primary" asp-route-id="@product.ProductID">View</a></p>
             </div>
         }
     </div>

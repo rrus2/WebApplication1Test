@@ -4,7 +4,7 @@
     var lol = new byte[10];
     _accessor.HttpContext.Session.TryGetValue("role", out lol);
 }
-@if (user.Identity.Name != null || lol != null)
+@if (lol != null)
 {
     <form asp-controller="User" asp-action="Logout">
         <input class="btn btn-primary" type="submit" value="Logout" />

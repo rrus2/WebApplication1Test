@@ -43,10 +43,6 @@ namespace WebApplication1Front.Controllers
                 return View("Index", "Home");
 
             var roles = await _userService.GetRolesByUser(result);
-            if (roles.Contains("Admin"))
-                ViewBag.User = roles[0];
-            else
-                ViewBag.User = "User";
 
             var claims = new List<Claim>()
             {
@@ -91,8 +87,6 @@ namespace WebApplication1Front.Controllers
         }
         public IActionResult Logout()
         {
-            ViewBag.User = null;
-
             HttpContext.User = null;
             _httpContextAccessor.HttpContext.User = null;
             _httpContextAccessor.HttpContext.Session.Clear();
