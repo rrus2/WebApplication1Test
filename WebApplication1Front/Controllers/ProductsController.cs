@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using WebApplication1Front.Models;
 using WebApplication1Front.Services;
 using WebApplication1Front.ViewModels;
 
@@ -15,11 +16,13 @@ namespace WebApplication1Front.Controllers
         private readonly IProductService _productService;
         private readonly IGenreService _genreService;
         private readonly IOrderService _orderService;
-        public ProductsController(IProductService productService, IGenreService genreService, IOrderService orderService)
+        private readonly IHttpContextAccessor _accessor;
+        public ProductsController(IProductService productService, IGenreService genreService, IOrderService orderService, IHttpContextAccessor accessor)
         {
             _productService = productService;
             _genreService = genreService;
             _orderService = orderService;
+            _accessor = accessor;
         }
         public async Task<IActionResult> Index()
         {
@@ -57,7 +60,9 @@ namespace WebApplication1Front.Controllers
         [HttpPost]
         public async Task<IActionResult> Details(int id, int amount)
         {
-            await _orderService.PlaceOrder(HttpContext.User.Identity.Name, id, amount);
+            var userStr = _accessor.HttpContext.Session.GetString("user");
+            var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ApplicationUser>(userStr);
+            await _orderService.PlaceOrder(user.Id, id, amount);
             return View(nameof(Details), id);
         }
         private async Task LoadGenres()

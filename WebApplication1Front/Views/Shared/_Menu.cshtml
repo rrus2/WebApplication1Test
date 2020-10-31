@@ -2,9 +2,14 @@
 @{ 
     var user = _accessor.HttpContext.User;
     var lol = new byte[10];
-    _accessor.HttpContext.Session.TryGetValue("role", out lol);
+    _accessor.HttpContext.Session.TryGetValue("user", out lol);
+    var userObj = new ApplicationUser();
+    if (lol != null) {
+        var userStr = System.Text.Encoding.Default.GetString(lol);
+        userObj = Newtonsoft.Json.JsonConvert.DeserializeObject<ApplicationUser>(userStr);
+    }
 }
-@if (lol != null)
+@if (userObj != null)
 {
     <form asp-controller="User" asp-action="Logout">
         <input class="btn btn-primary" type="submit" value="Logout" />

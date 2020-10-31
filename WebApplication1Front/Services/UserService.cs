@@ -57,6 +57,11 @@ namespace WebApplication1Front.Services
             }
         }
 
+        public Task<ApplicationUser> GetUser(string userid)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<ApplicationUserViewModel>> GetUsers()
         {
             throw new NotImplementedException();

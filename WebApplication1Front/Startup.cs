@@ -31,6 +31,7 @@ namespace WebApplication1Front
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGenreService, GenreService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddHttpContextAccessor();
             services.AddScoped<HttpContextAccessor>();
             services.AddRazorPages();

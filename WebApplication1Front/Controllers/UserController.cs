@@ -42,8 +42,6 @@ namespace WebApplication1Front.Controllers
             if (result == null)
                 return View("Index", "Home");
 
-            var roles = await _userService.GetRolesByUser(result);
-
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, result.Email)
@@ -66,10 +64,6 @@ namespace WebApplication1Front.Controllers
                 return View("Index", "Home");
 
             var roles = await _userService.GetRolesByUser(user);
-            if (roles.Contains("Admin"))
-                ViewBag.User = roles[0];
-            else
-                ViewBag.User = "User";
 
             var claims = new List<Claim>()
             {
@@ -81,6 +75,9 @@ namespace WebApplication1Front.Controllers
 
             HttpContext.User = principle;
             _httpContextAccessor.HttpContext.User = principle;
+
+            var str = Newtonsoft.Json.JsonConvert.SerializeObject(user);
+            _httpContextAccessor.HttpContext.Session.SetString("user", str);
             _httpContextAccessor.HttpContext.Session.SetString("role", roles[0]);
 
             return RedirectToAction("Index", "Home");

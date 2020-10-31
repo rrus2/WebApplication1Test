@@ -12,11 +12,11 @@ namespace WebApplication1Front.Services
     public class OrderService : IOrderService
     {
         private readonly IProductService _productService;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public OrderService(IProductService productService, UserManager<ApplicationUser> userManager)
+        private readonly IUserService _userService;
+        public OrderService(IProductService productService, IUserService userService)
         {
             _productService = productService;
-            _userManager = userManager;
+            _userService = userService;
         }
         public Task<Order> DeleteOrder(string username, int productid)
         {
@@ -33,11 +33,11 @@ namespace WebApplication1Front.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Order> PlaceOrder(string username, int productid, int amount)
+        public async Task<Order> PlaceOrder(string userid, int productid, int amount)
         {
             using (var client = new HttpClient())
             {
-                var user = await _userManager.FindByNameAsync(username);
+                var user = await _userService.GetUser(userid);
                 var product = await _productService.GetProduct(productid);
                 var order = new Order()
                 {

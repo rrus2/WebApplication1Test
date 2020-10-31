@@ -15,6 +15,7 @@ namespace WebApplication1Front.Services
         Task<ApplicationUser> LoginUser(LoginViewModel model);
         Task<ApplicationUserViewModel> DeleteUser(ApplicationUserViewModel model);
         Task<IEnumerable<ApplicationUserViewModel>> GetUsers();
+        Task<ApplicationUser> GetUser(string userid);
         Task<List<string>> GetRolesByUser(ApplicationUser user);
     }
 }

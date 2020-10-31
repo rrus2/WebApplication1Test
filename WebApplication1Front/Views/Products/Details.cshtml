@@ -1,6 +1,14 @@
 ﻿@model WebApplication1Front.Models.Product
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _accessor
 @{
-    ViewData["Title"] = "Details";
+    var lol = new byte[10];
+    _accessor.HttpContext.Session.TryGetValue("user", out lol);
+    var userObj = new ApplicationUser();
+    if (lol != null)
+    {
+        var userStr = System.Text.Encoding.Default.GetString(lol);
+        userObj = Newtonsoft.Json.JsonConvert.DeserializeObject<ApplicationUser>(userStr);
+    }
 }
 
 <div class="jumbotron text-center">
@@ -9,11 +17,14 @@
         <p>@Model.Price</p>
         <select name="amount" asp-items="@ViewBag.Amount"></select>
         <img src="@Model.ImagePath" class="img-fluid" />
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductID" />
-        </div>
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.ProductID" />
-        </div>
+        @if (userObj != null)
+        {
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductID" />
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@Model.ProductID" />
+            </div>
+        }
     </form>
 </div>
